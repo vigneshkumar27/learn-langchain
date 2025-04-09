@@ -1,0 +1,19 @@
+[project]
+name = "learn-langchain"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Vignesh Kumar V",email = "vvigneshkumar@ssdiblr.sharp.co.in"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+]
+
+[tool.poetry]
+packages = [{include = "learn_langchain", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
