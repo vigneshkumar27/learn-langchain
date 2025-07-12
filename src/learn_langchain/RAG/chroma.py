@@ -42,24 +42,34 @@ vector_store = Chroma(
 
 # print(len(vector_store.get()['ids']))
 
-llm = AzureChatOpenAI(azure_endpoint="https://ssdidev.openai.azure.com/",api_key="05d806f31335424c8d28bda612bb2ca6",azure_deployment="ssdi-dev-4o",api_version="2024-02-01")
+#  ---------------------------------------------------
 
-message_template = [
-    SystemMessage(content="You are a helpfull assistant. You respond to user queries only with provided information, just in short 5 to 10 sentences, If information is not provided or it's irrelevant to the query. Please respond that you don't have sufficent information and please restrict you knowledge to answer the queries"),
-    ('human',"Query : {query} : supporting information : {doc}")
-]
+# llm = AzureChatOpenAI(azure_endpoint="https://ssdidev.openai.azure.com/",api_key="05d806f31335424c8d28bda612bb2ca6",azure_deployment="ssdi-dev-4o",api_version="2024-02-01")
 
-def check_val(input):
-    if(input and len(input['doc'])):
-        return input
-    input['doc'] = ""
-    return input
-prompt_template = ChatPromptTemplate.from_messages(message_template)
+# message_template = [
+#     SystemMessage(content="You are a helpfull assistant. You respond to user queries only with provided information, just in short 5 to 10 sentences, If information is not provided or it's irrelevant to the query. Please respond that you don't have sufficent information and please restrict you knowledge to answer the queries"),
+#     ('human',"Query : {query} : supporting information : {doc}")
+# ]
 
-prompt = prompt_template.invoke({"query":"rvr","doc":"rbvetr"})
+# def check_val(input):
+#     if(input and len(input['doc'])):
+#         return input
+#     input['doc'] = ""
+#     return input
+# prompt_template = ChatPromptTemplate.from_messages(message_template)
 
-retriever = vector_store.as_retriever(search_type ="similarity_score_threshold",search_kwargs={"k":1,"score_threshold":0.1})
+# prompt = prompt_template.invoke({"query":"rvr","doc":"rbvetr"})
 
-chain = RunnableMap({"query":lambda x:x,"doc":lambda x: retriever.invoke(x)}) | RunnableLambda(check_val) | prompt_template | llm | StrOutputParser()
+# retriever = vector_store.as_retriever(search_type ="similarity_score_threshold",search_kwargs={"k":1,"score_threshold":0.1})
 
-print(chain.invoke("china"))
+# chain = RunnableMap({"query":lambda x:x,"doc":lambda x: retriever.invoke(x)}) | RunnableLambda(check_val) | prompt_template | llm | StrOutputParser()
+
+# print(chain.invoke("china"))
+
+from langchain_community.document_loaders import WebBaseLoader
+
+loader = WebBaseLoader(web_path=["https://www.blu-smart.com/"])
+
+doc = loader.load()
+
+print(doc[0])
